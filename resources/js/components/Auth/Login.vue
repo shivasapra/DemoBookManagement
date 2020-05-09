@@ -4,7 +4,11 @@
         <div class="col-md-8">
             <div class="card-shadow-success border mb-3 card card-body border-success col-md-12">
 
-                <div class="card-header">Login</div>
+                <div class="card-header">Login &nbsp;
+                     <span class="text-danger" v-if="error">
+                        ({{error}})
+                    </span>
+                </div>
 
                 <div class="card-body">
                     <form @submit.prevent= login>
@@ -46,12 +50,16 @@ export default {
             form:{
                 email:null,
                 password:null
-            }
+            },
+            error:null
         }
     },
     methods:{
         login(){
-            User.login(this.form)
+            this.error = null
+            axios.post('api/login',this.form)
+            .then(res => User.responseAfterLogin(res))
+            .catch(error => this.error = error.response.data)
         }
     }
 }

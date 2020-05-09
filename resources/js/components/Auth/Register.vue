@@ -4,9 +4,15 @@
         <div class="col-md-8">
             <div class="card-shadow-success border mb-3 card card-body border-success col-md-12">
 
-                <div class="card-header">Register</div>
+                <div class="card-header">
+                    Register
+
+                </div>
 
                 <div class="card-body">
+                    <span v-for="error in errors" :key="error"  class="text-danger text-center">
+                        <strong>. {{error[0]}}</strong> <br>
+                    </span>
                     <form @submit.prevent= register>
                         <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">Name</label>
@@ -73,14 +79,15 @@ export default {
                 phone:null,
                 password:null,
                 password_confirmation:null,
-            }
+            },
+                errors:null
         }
     },
     methods:{
         register(){
             axios.post('/api/register',this.form)
             .then(res => User.responseAfterLogin(res))
-            .catch(error => console.log(error))
+            .catch(error => this.errors = error.response.data.errors)
         }
     }
 }
